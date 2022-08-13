@@ -7,7 +7,7 @@ def parse_input user_input
     current_operator = "+" #set to plus so that the first integer is added
     split_input.each do |input|
         #get current operator
-        if ["*", "/", "+", "-"].include?(input)
+        if ["*", "/", "+", "-", "%"].include?(input)
             current_operator = input
             next
         end
