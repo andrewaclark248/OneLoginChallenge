@@ -9,9 +9,12 @@ class CliApp
         prompt = TTY::Prompt.new
         start_loop = true
 
+        puts "Enter alegrabic eqution (ex: 1 + 5) for awnser or type 'exit' to leave!!!"
+        puts "Enter alegrabic eqution (ex: 1 + 5) for awnser or type 'exit' to leave!!!"
+        puts "Enter alegrabic eqution (ex: 1 + 5) for awnser or type 'exit' to leave!!!"
         while start_loop
             #ask user for input
-            user_input = prompt.ask("Enter alegrabic eqution (ex: 1+5) for awnser or type 'exit' to leave:")
+            user_input = prompt.ask("Enter equation:")
 
             #exit cli if prompted
             return if user_input == "exit"
