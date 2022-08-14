@@ -1,6 +1,5 @@
 require "tty-prompt"
 require 'ostruct'
-prompt = TTY::Prompt.new
 
 #parse user input by looping through each integer/fraction and operator and add to running total
 #use metaprogramming via ruby public_send method to cacluate result
@@ -30,45 +29,47 @@ end
 #convert numbers from from fraction (1&3/4) to integer/floats 
 def convert_fraction_to_float user_input
     converted_number = 0
+    #split number from fraction
     user_input.split("&").each do |input|
-        current_value = Rational(input).to_f 
-        converted_number = converted_number + current_value
+        current_value = Rational(input).to_f #convert to float
+        converted_number = converted_number + current_value #add converted value to running total
     end
-    result = OpenStruct.new(success?: true, converted_number: converted_number)
-    return result
+    return OpenStruct.new(success?: true, converted_number: converted_number)
 rescue
     return OpenStruct.new(success?: false)
 end
 
 #convert float to fraction
 def convert_float_to_fraction integer
-    return integer.to_i.to_s if integer%1 == 0
-    return_string = ""
-    remainder = integer - integer.to_i
-    fraction = Rational(remainder).to_s
+    return integer.to_i.to_s if integer%1 == 0 #if no decimal/remainder, convert to integer then string
+    converted_float = ""
+
+    remainder = integer - integer.to_i #get whole number without decimal/remainder
+    fraction = Rational(remainder).to_s #get deciimal/remainder and convert to fraction
     whole_number = integer.to_i.to_s
-    return_string = return_string + fraction
-    if whole_number != "0"
-        return_string.prepend(whole_number + "&")
+    converted_float = converted_float + fraction
+
+    if whole_number != "0" #if whole_number present add to converted_float
+        converted_float.prepend(whole_number + "&")
     end
-    return return_string
+    return converted_float
 end
 
 #check for valid input
 def invalid_input user_input
-    return true if !user_input
+    return true if !user_input #return true if input nil/blank
     valid = false
-    check_for_operator = false
-    split_input = user_input.split(" ")
-    split_input.each do |input|
-        if check_for_operator #check for existence of operator
-            if !["*", "/", "+", "-", "%"].include?(input)
+    check_for_operator = false  #validate for operator in every other loop
+
+    user_input.split(" ").each do |input|
+        #check for existence of operator
+        if check_for_operator 
+            if !["*", "/", "+", "-", "%"].include?(input) #if operator not present invalid_input is true and break
                 valid = true
                 break
             end
         else #check for existence of integer/fraction
-            result = convert_fraction_to_float(input)
-
+            result = convert_fraction_to_float(input) #check for valid integer/fracton
             if !result.success?
                 valid = true
                 break
@@ -81,7 +82,9 @@ end
 
 
 #constantly ask for user input unless exited
+prompt = TTY::Prompt.new
 start_loop = true
+
 while start_loop
     #ask user for input
     user_input = prompt.ask("Enter alegrabic eqution (ex: 1+5) for awnser or type 'exit' to leave:")
