@@ -86,7 +86,7 @@ class CliApp
 
     #check for valid input
     def self.invalid_input user_input
-        return true if user_input.blank? #return true if input nil/blank
+        return true if !user_input #return true if input nil/blank
         valid = false
         check_for_operator = false  #validate for operator in every other loop
 
