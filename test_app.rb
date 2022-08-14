@@ -1,46 +1,47 @@
 require "tty-prompt"
 require 'ostruct'
-
 prompt = TTY::Prompt.new
 
+#parse user input by looping through each integer/fraction and operator and add to running total
+#use metaprogramming via ruby public_send method to cacluate result
+#convert integer/fractions to floats
+#easier to calculate total via float addition than traditional mathematical methods
 def parse_input user_input
-    split_input = user_input.split(" ")
-    total = 0
-    current_operator = "+" #set to plus so that the first integer is added
-    split_input.each do |input|
-        #get current operator
+    loop_total = 0                  #create running total variable
+    current_operator = "+"          #set to plus so that the first integer is added (x + 0)
+    user_input.split(" ").each do |input|
+        #get current operator and next if present
         if ["*", "/", "+", "-", "%"].include?(input)
             current_operator = input
             next
         end
 
         #if numbers convert fractions to floats
-        current_integer = convert_fraction_to_integer(input) #Rational(input).to_f
-        
-        #if no operator skip else execute operator
-        if current_operator
-            total = total.public_send(current_operator, current_integer.total) 
-        else
-            next
-        end
+        result = convert_fraction_to_float(input)
+
+        #use metaprogramming to multiply/divide/add/subtract/minus/modulo
+        loop_total = loop_total.public_send(current_operator, result.converted_number) 
     end
-    returnvar = convert_integer_to_fraction(total)
-    return returnvar
+    #convert from float to fraction
+    total = convert_float_to_fraction(loop_total)
+    return total
 end
 
-def convert_fraction_to_integer user_input
-    total = 0
+#convert numbers from from fraction (1&3/4) to integer/floats 
+def convert_fraction_to_float user_input
+    converted_number = 0
     user_input.split("&").each do |input|
         current_value = Rational(input).to_f 
-        total = total + current_value
+        converted_number = converted_number + current_value
     end
-    result = OpenStruct.new(success?: true, total: total)
+    result = OpenStruct.new(success?: true, converted_number: converted_number)
     return result
 rescue
     return OpenStruct.new(success?: false)
 end
 
-def convert_integer_to_fraction integer
+#convert float to fraction
+def convert_float_to_fraction integer
     return integer.to_i.to_s if integer%1 == 0
     return_string = ""
     remainder = integer - integer.to_i
@@ -53,6 +54,7 @@ def convert_integer_to_fraction integer
     return return_string
 end
 
+#check for valid input
 def invalid_input user_input
     return true if !user_input
     valid = false
@@ -65,7 +67,7 @@ def invalid_input user_input
                 break
             end
         else #check for existence of integer/fraction
-            result = convert_fraction_to_integer(input)
+            result = convert_fraction_to_float(input)
 
             if !result.success?
                 valid = true
@@ -78,25 +80,22 @@ def invalid_input user_input
 end
 
 
-not_hit_exit = true
-
-while not_hit_exit
-
+#constantly ask for user input unless exited
+start_loop = true
+while start_loop
+    #ask user for input
     user_input = prompt.ask("Enter alegrabic eqution (ex: 1+5) for awnser or type 'exit' to leave:")
 
     #exit cli if prompted
-    if user_input == "exit"
-        return
-    end
+    return if user_input == "exit"
 
     #check for valid user input
     if invalid_input(user_input)
-        puts "Invalid Input. Please enter value!"
+        puts "Invalid Input. Please enter correct value!"
         next
+    else
+        #if valid calculate result
+        puts parse_input(user_input)
     end
-
-    puts parse_input(user_input)
-
-
 end
 
