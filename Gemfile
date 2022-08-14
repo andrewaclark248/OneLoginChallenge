@@ -11,3 +11,5 @@ gem 'pry', '~> 0.13.1'
 gem 'rails', '~> 5.0'
 
 gem 'bigdecimal'
+
+gem 'ruby_figlet'
