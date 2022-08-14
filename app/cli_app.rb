@@ -1,5 +1,8 @@
 require "tty-prompt"
 require 'ostruct'
+require 'bigdecimal/util'
+
+
 
 class CliApp
 
@@ -71,7 +74,7 @@ class CliApp
         converted_float = ""
 
         remainder = integer - integer.to_i #get whole number without decimal/remainder
-        fraction = Rational(remainder).to_s #get deciimal/remainder and convert to fraction
+        fraction = Rational(BigDecimal(remainder.to_s)).to_s #get deciimal/remainder and convert to fraction & BigDecimal for simple fractions
         whole_number = integer.to_i.to_s
         converted_float = converted_float + fraction
 
@@ -83,7 +86,7 @@ class CliApp
 
     #check for valid input
     def self.invalid_input user_input
-        return true if !user_input #return true if input nil/blank
+        return true if user_input.blank? #return true if input nil/blank
         valid = false
         check_for_operator = false  #validate for operator in every other loop
 
@@ -109,4 +112,3 @@ class CliApp
 end
 
 
-CliApp.start_app
