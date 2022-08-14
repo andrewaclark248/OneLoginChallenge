@@ -2,6 +2,6 @@ require './app/cli_app.rb'
 require 'ruby_figlet'
 using RubyFiglet
 
-puts "meow...".art                               
+puts "OneLogin".art                               
 
 CliApp.start_app
