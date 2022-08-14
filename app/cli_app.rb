@@ -2,8 +2,6 @@ require "tty-prompt"
 require 'ostruct'
 require 'bigdecimal/util'
 
-
-
 class CliApp
 
     def self.start_app
