@@ -46,7 +46,10 @@ def convert_integer_to_fraction integer
     remainder = integer - integer.to_i
     fraction = Rational(remainder).to_s
     whole_number = integer.to_i.to_s
-    return_string = whole_number + "&" + fraction
+    return_string = return_string + fraction
+    if whole_number != "0"
+        return_string.prepend(whole_number + "&")
+    end
     return return_string
 end
 
