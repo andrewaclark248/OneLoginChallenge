@@ -140,7 +140,7 @@ RSpec.describe CliApp do
     describe 'CliApp.invalid_input' do
         context "invalid characters" do
             it "whole number conversion" do 
-                invalid_input = CliApp.invalid_input("")
+                invalid_input = CliApp.invalid_input(nil)
                 expect(invalid_input).to eq(true)  
             end  
             it "missing operator" do 
