@@ -2,6 +2,9 @@
 This README documents the steps that are necessary to get the
 application up and running.
 
+Note:
+Thouht of breakingn the cli_app.rb into service classes, but thought this was fine given the complexity of the sapp is fairly straightforward. Maybe if the app was a bit more complicated
+
 1.) Fork the app on my repository: 
 https://github.com/andrewaclark248/OneLoginChallenge
 
